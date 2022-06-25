@@ -1,0 +1,32 @@
+version: "3.4"
+
+services:
+  app:
+    container_name: backend-cats-app
+    image: node:lts-alpine
+    networks:
+      - app_network
+    expose:
+      - 4000
+    ports:
+      - 4000:4000
+    depends_on: [mongodb]
+
+  mongodb:
+    container_name: mongodb-cats
+    image: bitnami/mongodb:4.4
+    environment:
+      - MONGODB_USERNAME=profusion
+      - MONGODB_PASSWORD=profusion123
+      - MONGODB_DATABASE=cats
+    volumes:
+      - catsdb:/data/db
+    networks:
+      - app_network
+
+volumes:
+  catsdb:
+
+networks:
+  app_network:
+    driver: bridge
